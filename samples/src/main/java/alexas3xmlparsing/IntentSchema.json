@@ -1,0 +1,16 @@
+{
+  "intents": [
+    {
+      "intent": "Oneshotgetclsnews"
+    },
+      {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}

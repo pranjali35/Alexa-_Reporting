@@ -1,0 +1,17 @@
+<DailyStats>
+<Date>13-Jun-2017</Date>
+<IPISGeneration>00:01 CET</IPISGeneration>
+<SwapsGeneration>06:30 CET</SwapsGeneration>
+<RPISGeneration>00:13 CET</RPISGeneration>
+<IOSwapsSettled>680</IOSwapsSettled>
+<ValueOfIOSwapsUSD>169 Billion</ValueOfIOSwapsUSD>
+<SidesSettledBeforeSplitting>633738</SidesSettledBeforeSplitting>
+<SidesSettledAfterSplitting>643738</SidesSettledAfterSplitting>
+<CLS1CASSidesSettled>867192</CLS1CASSidesSettled>
+<SettledCompleted>08:38 CET</SettledCompleted>
+<GrossValuesSettledUSD>4558 Billion</GrossValuesSettledUSD>
+<ValueOfNetPayInsUSD>46</ValueOfNetPayInsUSD>
+<AsiaPacificPayOutsCompleted>09:32 CET</AsiaPacificPayOutsCompleted>
+<AllPayOutsCompleted>11:36 CET</AllPayOutsCompleted>
+<NextBusinessDayEligibleSides>664000</NextBusinessDayEligibleSides>
+</DailyStats>

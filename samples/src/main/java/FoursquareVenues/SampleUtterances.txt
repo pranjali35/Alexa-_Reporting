@@ -1,0 +1,4 @@
+OneshotFourSquareIntent get nearby places in {City} {Search}
+OneshotFourSquareIntent get the closest places in {City} {Search}
+OneshotFourSquareIntent get nearby restaurants in {City} {Search}
+OneshotFourSquareIntent get the closest restaurants in {City} {Search}

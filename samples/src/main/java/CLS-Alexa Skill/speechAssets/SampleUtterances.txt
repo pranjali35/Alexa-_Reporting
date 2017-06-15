@@ -1,0 +1,2 @@
+OneshotCLSGrossValueIntent gross value of settlement for {Date}
+OneshotCLSGrossValueIntent gross value of settlement for yesterday

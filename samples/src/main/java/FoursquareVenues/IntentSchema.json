@@ -1,0 +1,27 @@
+{
+  "intents": [
+    {
+      "intent": "OneshotFourSquareIntent",
+      "slots": [
+        {
+          "name": "City",
+          "type": "LIST_OF_CITIES"
+        },
+        {
+          "name": "Search",
+          "type": "LIST_OF_SEARCHKEY"
+        }
+      ]
+    },
+      {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
+    
