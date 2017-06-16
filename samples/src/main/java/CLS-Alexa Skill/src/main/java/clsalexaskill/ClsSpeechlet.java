@@ -42,6 +42,8 @@ import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
 import com.amazon.speech.ui.SsmlOutputSpeech;
 
+
+
 //import TidePoolerSpeechlet.CityDateValues;
 //import TidePoolerSpeechlet.HighTideValues;
 
@@ -53,6 +55,8 @@ public class ClsSpeechlet implements Speechlet {
 	private static final String SLOT_DATE = "Date";
 	private static final String ENDPOINT = "https://s3.amazonaws.com/clsalexatest/2017-06-14T13%3A53%3A41.765";
 	private static final int MONTH_TWO_DIGIT_THRESHOLD = 10;
+	private static final String SESSION_DATE_DISPLAY = "displayDate";
+	private static final String SESSION_DATE_REQUEST = "requestDateParam";
 	public SpeechletResponse onIntent(final IntentRequest request, final Session session)
 			throws SpeechletException {
 		log.info("onIntent requestId={}, sessionId={}", request.getRequestId(),
@@ -64,6 +68,22 @@ public class ClsSpeechlet implements Speechlet {
 		if ("OneshotCLSGrossValueIntent".equals(intentName)) {
 			System.out.println("****in intent");
 			return handleOneshotCLSGrossValueRequest(intent, session);
+		}else if ("DialogreportIntent".equals(intentName)) {
+			// Determine if this turn is for city, for date, or an error.
+			// We could be passed slots with values, no slots, slots with no value.
+			System.out.println("Hello!! I am in Dialog Intent");
+			Slot dateSlot = intent.getSlot(SLOT_DATE);
+			if (dateSlot != null && dateSlot.getValue() != null) {
+				System.out.println("Hello!! I am in Dialog Intent 11111");
+				return handleDateDialogRequest(intent, session);
+			} 
+			else {
+				System.out.println("Hello!! I am in Dialog Intent 2222222");
+				return handleNoSlotDialogRequest(intent, session);
+			}
+		}else if ("OneshotSidesSettledIntent".equals(intentName)) {
+			System.out.println("****in intent OneshotSidesSettledIntent");
+			return handleOneshotSidesSettledRequest(intent, session);
 		}else if ("AMAZON.HelpIntent".equals(intentName)) {
 			return handleHelpRequest();
 		} else if ("AMAZON.StopIntent".equals(intentName)) {
@@ -85,7 +105,33 @@ public class ClsSpeechlet implements Speechlet {
 			this.speechValue = speechValue;
 		}
 	}
+	private SpeechletResponse handleDateDialogRequest(final Intent intent, final Session session) {
+		DateValues<String> dateObject = getDateFromIntent(intent);
+		// The user provided a date out of turn. Set date in session and prompt for city
+		session.setAttribute(SESSION_DATE_DISPLAY, dateObject.speechValue);
+		System.out.println(" In handle Dialog request &&&&&&");
+		String speechOutput =
+				"Reading CLS Report for" + dateObject.speechValue
+				+ "?";
+		String repromptText = "What you would like to know?" + "Settlement Gross value"
+				+ "or sides settled by CLS ";
 
+		return newAskResponse(speechOutput, repromptText);
+	}
+
+
+	private SpeechletResponse handleNoSlotDialogRequest(final Intent intent, final Session session) {
+		// get date re-prompt
+		String speechOutput =
+				"Hi! Welcome to CLS Reporting service" + " "
+						+ "If you would like to know Gross settlement for the day say gross settlement"
+						+ " or If you would like to know sides settled for the day say sides settled";
+
+		// repromptText is the speechOutput
+		String repromptText = "What you would like to know?";
+		return newAskResponse(speechOutput, repromptText );
+
+	}
 	private DateValues<String> getDateFromIntent(final Intent intent) {
 		Slot dateSlot = intent.getSlot(SLOT_DATE);
 		DateValues<String> dateObject;
@@ -132,9 +178,16 @@ public class ClsSpeechlet implements Speechlet {
 		DateValues<String> dateObject = getDateFromIntent(intent);
 
 		// all slots filled, either from the user or by default values. Move to final request
-		return makeClsReportRequest(dateObject);
+		return makeClsReportRequest(dateObject, intent);
 	}
-	private SpeechletResponse makeClsReportRequest(DateValues<String> date) {
+
+	private SpeechletResponse handleOneshotSidesSettledRequest(final Intent intent, final Session session) {
+		DateValues<String> dateObject = getDateFromIntent(intent);
+		System.out.print("***** IN handleOneshotSidesSettledRequest INTENT:" +intent.getName());
+		// all slots filled, either from the user or by default values. Move to final request
+		return makeClsReportRequest(dateObject, intent);
+	}
+	private SpeechletResponse makeClsReportRequest(DateValues<String> date, Intent intent) {
 
 		String speechOutput = "";
 
@@ -165,9 +218,26 @@ public class ClsSpeechlet implements Speechlet {
 				{
 					Element eElement = (Element) nNode;
 					System.out.println("First Name:" +eElement.getElementsByTagName("GrossValuesSettledUSD").item(0).getTextContent());
-					speechOutput = 
-							"The Gross settlement value done by CLS is "
-									+ eElement.getElementsByTagName("GrossValuesSettledUSD").item(0).getTextContent();
+					if ("OneshotCLSGrossValueIntent".equals(intent.getName()))
+					{
+						speechOutput = 
+								"The Gross settlement value done by CLS is "
+										+ eElement.getElementsByTagName("GrossValuesSettledUSD").item(0).getTextContent();
+					}
+					else if ("OneshotSidesSettledIntent".equals(intent.getName()))
+					{
+						speechOutput = 
+								"The sides settled by CLS are "
+										+ eElement.getElementsByTagName("CLS1CASSidesSettled").item(0).getTextContent();
+					}
+					else
+					{
+						speechOutput = 
+								"Did you mean the gross value of settlement today or sides settled by CLS today?"
+										+ eElement.getElementsByTagName("GrossValuesSettledUSD").item(0).getTextContent()
+										+ eElement.getElementsByTagName("CLS1CASSidesSettled").item(0).getTextContent();
+
+					}
 				}
 			}
 		}
@@ -216,8 +286,8 @@ public class ClsSpeechlet implements Speechlet {
 	private SpeechletResponse handleHelpRequest() {
 		String repromptText = "For which day you would like to know the CLS stats?";
 		String speechOutput =
-				"I can tell you CLS Gross settlement for the day. "
-						+ "Or if you would like to know the number of sides CLS settled for the day."
+				"I can tell you CLS Gross settlement for the day"
+						+ "Or the number of sides CLS settled for the day"
 						+ "Or you can just say exit. " + repromptText;
 		return newAskResponse(speechOutput, repromptText);
 	};

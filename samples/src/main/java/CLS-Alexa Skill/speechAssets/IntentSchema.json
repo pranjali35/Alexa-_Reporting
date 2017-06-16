@@ -9,6 +9,24 @@
         }
       ]
     },
+    {
+      "intent": "OneshotSidesSettledIntent",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.DATE"
+        }
+      ]
+    },
+    {
+      "intent": "DialogreportIntent",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.DATE"
+        }
+      ]
+    },
     
     {
       "intent": "AMAZON.HelpIntent"

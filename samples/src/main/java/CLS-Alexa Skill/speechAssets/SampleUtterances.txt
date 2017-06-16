@@ -1,2 +1,13 @@
 OneshotCLSGrossValueIntent gross value of settlement for {Date}
 OneshotCLSGrossValueIntent gross value of settlement for yesterday
+
+OneshotSidesSettledIntent sides settled by CLS on yesterday
+OneshotSidesSettledIntent sides settled by CLS on {Date}
+OneshotSidesSettledIntent sides settled 
+OneshotSidesSettledIntent sides settled by CLS 
+
+DialogTideIntent {Date}
+DialogTideIntent hello
+DialogTideIntent hi
+DialogTideIntent cls
+DialogTideIntent Report
